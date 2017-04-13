@@ -14,7 +14,9 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
 
     private SensorManager sensorManager;
     private TextView count;
+    private TextView meter;
     boolean activityRunning;
+    private int initCountValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
         setContentView(R.layout.activity_counter);
 
         count = (TextView) findViewById(R.id.counter);
+        meter = (TextView) findViewById(R.id.meters);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
 
@@ -48,7 +51,17 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (activityRunning) {
-            count.setText(String.valueOf(event.values[0]));
+
+            if(initCountValue < 1){
+                initCountValue = (int)event.values[0];
+            }
+
+            int steps = ((int)event.values[0]) - initCountValue;
+
+            //Since it will return the total number since we registered we need to subtract the initial amount of steps
+            count.setText("Number of steps:  " + String.valueOf(steps));
+
+            meter.setText("Number of meters:  " + String.valueOf(steps*0.74));
         }
 
     }
