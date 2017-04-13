@@ -56,9 +56,10 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
                 initCountValue = (int)event.values[0];
             }
 
+            //Since it will return the total number since we registered, we need to subtract the initial amount of steps
             int steps = ((int)event.values[0]) - initCountValue;
 
-            //Since it will return the total number since we registered we need to subtract the initial amount of steps
+
             count.setText("Number of steps:  " + String.valueOf(steps));
 
             meter.setText("Number of meters:  " + String.valueOf(steps*0.74));
