@@ -13,7 +13,6 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
 
 
     private SensorManager sensorManager;
-    private TextView count;
     private TextView meter;
     boolean activityRunning;
     private int initCountValue = 0;
@@ -23,7 +22,7 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
 
-        count = (TextView) findViewById(R.id.counter);
+
         meter = (TextView) findViewById(R.id.meters);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
@@ -35,8 +34,6 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor != null) {
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-        } else {
-            count.setText("Count sensor not available...");
         }
 
     }
@@ -58,11 +55,15 @@ public class CounterActivity extends AppCompatActivity implements SensorEventLis
 
             //Since it will return the total number since we registered, we need to subtract the initial amount of steps
             int steps = ((int)event.values[0]) - initCountValue;
+            int meters = 20;
+            double remaining = meters - steps*0.74;
 
 
-            count.setText("Number of steps:  " + String.valueOf(steps));
-
-            meter.setText("Number of meters:  " + String.valueOf(steps*0.74));
+            if(remaining <= 0){
+                meter.setText("Well done!");
+            }else{
+                meter.setText("Number of meters left:  " + String.valueOf((int)remaining));
+            }
         }
 
     }
